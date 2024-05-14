@@ -4,7 +4,6 @@ from PIL import Image
 import numpy as np
 
 # Load the pre-trained model
-@st.cache_resource
 def load_model():
     model = tf.keras.models.load_model('image_classification_model.h5')
     return model
