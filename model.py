@@ -4,13 +4,14 @@ from PIL import Image
 import numpy as np
 
 # Load the pre-trained model
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def load_model():
     model = tf.keras.models.load_model('image_classification_model.h5')
     return model
 
 # Function to preprocess the image
 def preprocess_image(image):
+    image = image.convert('RGB')  # Ensure image is in RGB mode
     img = image.resize((150, 150))
     img_array = np.array(img)
     img_array = img_array / 255.0
@@ -19,7 +20,9 @@ def preprocess_image(image):
 
 # Function to make predictions
 def make_prediction(model, img_array):
+    st.write(f"Shape of preprocessed image: {img_array.shape}")
     predictions = model.predict(img_array)
+    st.write(f"Predictions: {predictions}")
     return predictions
 
 # Display the prediction result
@@ -58,7 +61,7 @@ def main():
 
         # Display the prediction result
         predicted_class, confidence_percentage = display_prediction(predictions)
-        st.success(f"The predicted sign is: {predicted_class} with {confidence_percentage:.2f}% confidence")
+        st.success(f"The predicted sign is: **{predicted_class}** with **{confidence_percentage:.2f}%** confidence")
 
 # Run the Streamlit app
 if __name__ == "__main__":
